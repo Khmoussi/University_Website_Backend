@@ -1,0 +1,61 @@
+package com.example.issatc.UseCases;
+
+import com.example.issatc.Entities.Departement;
+import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
+import com.example.issatc.Entities.Sector;
+import com.example.issatc.Ports.DataRepository;
+import com.example.issatc.Ports.DataServicePort;
+
+import java.util.List;
+import java.util.Map;
+
+public class DataService implements DataServicePort {
+    private final DataRepository dataRepository;
+    public DataService(DataRepository dataRepository){
+        this.dataRepository=dataRepository;
+    }
+
+
+    @Override
+    public List<TeacherWithDepResponse> getTeachers(){
+        List<TeacherWithDepResponse> list1 =this.dataRepository.getAllTeachers();
+        List<TeacherWithDepResponse> list2 =this.dataRepository.getChefs();
+        for(int i=0;i<list2.size();i++){
+
+            for(int j=0;j<list1.size();j++){
+               if(list1.get(j).getEmail().equals(list2.get(i).getEmail())){
+               list1.remove(j);
+               list1.add(list2.get(i));
+               }
+            }
+        }
+        return list1;
+
+    }
+
+    @Override
+    public void assigningGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames) {
+
+        this.dataRepository.assignGroups(list,groupNames);
+
+    }
+
+    @Override
+    public Map<String, Integer> saveGroups(List<GroupsBySectorRequest> groupName) {
+       return  this.dataRepository.saveGroups(groupName);
+    }
+
+    @Override
+    public List<Departement> getDepartments() {
+       return  this.dataRepository.getDepartments();
+    }
+
+    @Override
+    public List<Sector> getSectors() {
+        return  this.dataRepository.getSectors();
+
+    }
+
+
+}

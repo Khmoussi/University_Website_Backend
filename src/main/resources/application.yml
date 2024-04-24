@@ -1,0 +1,37 @@
+springdoc:
+  swagger-ui:
+    defaultModelsExpandDepth: -1
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:656/issatc
+    username: root
+    password: KHmoussi5*
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        platform: mysql
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: khmoussiaouina@gmail.com
+    password: ttnc duzu cbkw kooi
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+
+server:
+  port: 9000
