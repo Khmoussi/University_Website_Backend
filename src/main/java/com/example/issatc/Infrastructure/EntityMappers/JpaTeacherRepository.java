@@ -18,4 +18,6 @@ public interface JpaTeacherRepository  extends JpaRepository<TeacherMapper,Strin
     @Query("select new com.example.issatc.Entities.Responses.TeacherWithDepResponse(c.lastName ,c.firstName ,c.email , c.phoneNumb ,c.cin,c.department.name ) from chefDepartment c   ")
 
     List<TeacherWithDepResponse> getChefs();
+
+
 }

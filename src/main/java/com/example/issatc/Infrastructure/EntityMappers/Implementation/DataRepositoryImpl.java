@@ -1,9 +1,12 @@
 package com.example.issatc.Infrastructure.EntityMappers.Implementation;
 
 import com.example.issatc.Entities.Departement;
+import com.example.issatc.Entities.Group;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
 import com.example.issatc.Entities.Sector;
+import com.example.issatc.Entities.Subject;
 import com.example.issatc.Infrastructure.EntityMappers.*;
 import com.example.issatc.Infrastructure.JpaSectorRepository;
 import com.example.issatc.Ports.DataRepository;
@@ -11,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -74,5 +78,61 @@ i++;
     @Override
     public List<Sector> getSectors() {
         return this.sectorRepository.getSectors();
+    }
+
+    @Override
+    public List<Subject> getTeacherSubjects(String email) {
+        TeacherMapper teacher=this.teacherRepository.findById(email).orElseThrow();
+        List<SubjectMapper> list=teacher.getSubjects();
+        List<Subject> resultList=new ArrayList<>();
+        for (int i=0;i< list.size();i++){
+            resultList.add(new Subject(list.get(i).getId(),list.get(i).getName(),list.get(i).getType(),list.get(i).getSemester(),list.get(i).getCoeff(),list.get(i).getSessionNumb()));
+        }
+        return resultList;
+    }
+    public List<SubjectMapper>  getTeacherSubjects2(String email) {
+        TeacherMapper teacher=this.teacherRepository.findById(email).orElseThrow();
+        List<SubjectMapper> list=teacher.getSubjects();
+
+        return list;
+    }
+
+    @Override
+    public List<Group> getGroupBySector(String sectorId) {
+        List<Group> list= this.groupRepository.getGroupsBySector(sectorId);
+        return list;
+    }
+
+    @Override
+    public List<Sector> getSectorsBySubject() {
+        return null;
+    }
+
+    @Override
+    public List<SubjectWithGroups> getTeacherSubjectsGroups(String email) {
+//getTeacherSubjects
+        List<Group> groupList ;
+        List<SubjectMapper> teacherSubjects =getTeacherSubjects2(email);
+        List<SubjectWithGroups> subjectWithGroupsList =new ArrayList<>();
+        for (SubjectMapper i:teacherSubjects
+             ) {
+            groupList =new ArrayList<>();
+            for (SectorMapper j:i.getSectors()
+                 ) {
+                groupList.addAll(getGroupsBySector(j));
+            }
+
+subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getName(),i.getType(),i.getSemester(),i.getCoeff(),i.getSessionNumb()),groupList));
+        }
+        return subjectWithGroupsList;
+
+
+
+    }
+    List<Group> getGroupsBySector(SectorMapper sector){
+return this.groupRepository.getGroupsBySector(sector.getName());
+    }
+    List<SectorMapper>SectorsBySubject(SubjectMapper subjectMapper){
+       return subjectMapper.getSectors();
     }
 }

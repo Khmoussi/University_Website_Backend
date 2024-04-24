@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -17,6 +18,7 @@ public class IssatcApplication {
 
 private final JpaTeacherRepository jpaTeacherRepository;
 	private final JpaGroupRepository groupRepository;
+	private final JpaSubjectRepository subjectRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(IssatcApplication.class, args);
@@ -36,10 +38,9 @@ private final JpaTeacherRepository jpaTeacherRepository;
 	List<TeacherWithDepResponse> chefDepWithDepNameResponse=this.jpaTeacherRepository.getAllTeachers();
 
 	//this.groupRepository.save(new GroupMapper("Group 1"));
-		return args -> {
+	return args -> {
 
-
-		};
+	};
 
 	}
 }

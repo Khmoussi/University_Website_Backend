@@ -7,7 +7,9 @@ import java.io.Serializable;
 @Entity(name = "seance")
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"group_id", "day", "seanceNumb"}),
-        @UniqueConstraint(columnNames = { "day", "seanceNumb","teacher_id"})
+        @UniqueConstraint(columnNames = { "day", "seanceNumb","teacher_id"}),
+        @UniqueConstraint(columnNames = {"day","seanceNumb","classRoomId"}
+        )
 
 })
 @IdClass(SeanceMapper.SeanceId.class)
@@ -27,6 +29,10 @@ public class SeanceMapper {
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private SubjectMapper subject;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "classRoomId")
+    ClassRoom classRoom;
 
     @Id
     @Column(name = "day")
@@ -35,6 +41,8 @@ public class SeanceMapper {
     @Id
     @Column(name = "seanceNumb")
     private int seanceNumb;
+
+
 
     // Other attributes...
 
@@ -45,6 +53,8 @@ public class SeanceMapper {
         private GroupMapper group;
         private TeacherMapper teacher;
         private SubjectMapper subject;
+        private ClassRoom classRoom;
+
         private String day;
         private int seanceNumb;
 

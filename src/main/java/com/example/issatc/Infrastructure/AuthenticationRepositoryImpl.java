@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Random;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public class AuthenticationRepositoryImpl implements AuthenticationRepository {
     private final JpaChefDepartment chefDepartmentRepository;
     private final DepartmentRepository departmentRepository;
     private final JpaSectorRepository sectorRepository;
+    public final JpaSubjectRepository subjectRepository;
+    private final JpaTeacherRepository teacherRepository;
+
     @Autowired
     JavaMailSender javaMailSender;
     @Override
@@ -299,6 +303,7 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
             if(!authenticationRepository.existsById("teacher"+String.valueOf(i)+"@gmail.com"))
                 authenticationTeacherRepository.save(new TeacherMapper("teacher"+String.valueOf(i)+"@gmail.com","teacher"+String.valueOf(i)+"Firstname","teacher"+String.valueOf(i)+"Lastname",Role.TEACHER,i+13275684));
 
+
         }
 
         // creating departments
@@ -308,7 +313,115 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
                 departmentRepository.save(new DepartmentMapper("department" + String.valueOf(i)));
             }
         }
+          int s=1;
+          //creating  subjects
+        for(int i=1;i<=12;i++){
+           for(int j=0;j<3;j++){
+               if(!subjectRepository.existsById(i+j)){
+                   subjectRepository.save(new SubjectMapper(i +j,"Matiere" + String.valueOf(i),SubjectType.values()[j],s,2,1));
+               }
+               if(i==6)
+                   s=2;
+           }
+
+        }
 
 
+        //assigning subjects to teacher:
+
+        List<SubjectMapper> list = new ArrayList<>();
+        TeacherMapper teacher = this.teacherRepository.findById("teacher1@gmail.com").orElseThrow();
+        SubjectMapper s1 = this.subjectRepository.findById(1).orElseThrow();
+        SubjectMapper s2 = this.subjectRepository.findById(2).orElseThrow();
+
+        list.add(s1); // Add the SubjectMapper object to the list
+        list.add(s2);
+        teacher.setSubjects(list); // Set the subjects of the TeacherMapper object
+        this.teacherRepository.save(teacher);
+
+        //2
+         list = new ArrayList<>();
+         teacher = this.teacherRepository.findById("teacher2@gmail.com").orElseThrow();
+         s1 = this.subjectRepository.findById(52).orElseThrow();
+         s2 = this.subjectRepository.findById(53).orElseThrow();
+
+        list.add(s1); // Add the SubjectMapper object to the list
+        list.add(s2);
+        teacher.setSubjects(list); // Set the subjects of the TeacherMapper object
+        this.teacherRepository.save(teacher);
+        //3
+        list = new ArrayList<>();
+        teacher = this.teacherRepository.findById("teacher3@gmail.com").orElseThrow();
+        s1 = this.subjectRepository.findById(57).orElseThrow();
+        s2 = this.subjectRepository.findById(58).orElseThrow();
+
+        list.add(s1); // Add the SubjectMapper object to the list
+        list.add(s2);
+        teacher.setSubjects(list); // Set the subjects of the TeacherMapper object
+        this.teacherRepository.save(teacher);
+
+        //4
+        list = new ArrayList<>();
+        teacher = this.teacherRepository.findById("teacher4@gmail.com").orElseThrow();
+        s1 = this.subjectRepository.findById(77).orElseThrow();
+        s2 = this.subjectRepository.findById(78).orElseThrow();
+
+        list.add(s1); // Add the SubjectMapper object to the list
+        list.add(s2);
+        teacher.setSubjects(list); // Set the subjects of the TeacherMapper object
+        this.teacherRepository.save(teacher);
+
+        //5
+
+        list = new ArrayList<>();
+        teacher = this.teacherRepository.findById("teacher5@gmail.com").orElseThrow();
+        s1 = this.subjectRepository.findById(120).orElseThrow();
+        s2 = this.subjectRepository.findById(121).orElseThrow();
+
+        list.add(s1); // Add the SubjectMapper object to the list
+        list.add(s2);
+        teacher.setSubjects(list); // Set the subjects of the TeacherMapper object
+        this.teacherRepository.save(teacher);
+
+
+
+
+        //assigning subjects to sector
+//1
+        List<SubjectMapper> list4 =this.subjectRepository.findAllByName("Matiere1");
+        SectorMapper sectorMapper=this.sectorRepository.findById("Ing A1").orElseThrow();
+        sectorMapper.setSubjects(list4);
+        this.sectorRepository.save(sectorMapper);
+
+        //2
+        list4 =this.subjectRepository.findAllByName("Matiere2");
+         sectorMapper=this.sectorRepository.findById("Ing A1").orElseThrow();
+        sectorMapper.setSubjects(list4);
+        this.sectorRepository.save(sectorMapper);
+
+        list4 =this.subjectRepository.findAllByName("Matiere2");
+        sectorMapper=this.sectorRepository.findById("Ing A2").orElseThrow();
+        sectorMapper.setSubjects(list4);
+        this.sectorRepository.save(sectorMapper);
+
+
+        list4 =this.subjectRepository.findAllByName("Matiere3");
+        sectorMapper=this.sectorRepository.findById("Ing A2").orElseThrow();
+        sectorMapper.setSubjects(list4);
+        this.sectorRepository.save(sectorMapper);
+
+
+
+        list4 =this.subjectRepository.findAllByName("Matiere4");
+        sectorMapper=this.sectorRepository.findById("Ing A3").orElseThrow();
+        sectorMapper.setSubjects(list4);
+        this.sectorRepository.save(sectorMapper);
+
+        list4 =this.subjectRepository.findAllByName("Matiere5");
+        sectorMapper=this.sectorRepository.findById("Ing A3").orElseThrow();
+        sectorMapper.setSubjects(list4);
+        this.sectorRepository.save(sectorMapper);
     }
+
+
 }

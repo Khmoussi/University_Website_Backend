@@ -2,9 +2,10 @@ package com.example.issatc.Infrastructure.EntityMappers;
 
 import com.example.issatc.Entities.Student;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
-
+@Data
 @Entity(name = "sector")
 public class SectorMapper {
 

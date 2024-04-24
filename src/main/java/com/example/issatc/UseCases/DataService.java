@@ -1,9 +1,12 @@
 package com.example.issatc.UseCases;
 
 import com.example.issatc.Entities.Departement;
+import com.example.issatc.Entities.Group;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
 import com.example.issatc.Entities.Sector;
+import com.example.issatc.Entities.Subject;
 import com.example.issatc.Ports.DataRepository;
 import com.example.issatc.Ports.DataServicePort;
 
@@ -54,6 +57,12 @@ public class DataService implements DataServicePort {
     @Override
     public List<Sector> getSectors() {
         return  this.dataRepository.getSectors();
+
+    }
+
+    @Override
+    public List<SubjectWithGroups> getTeacherSubjectGroups(String email) {
+      return   this.dataRepository.getTeacherSubjectsGroups(email);
 
     }
 

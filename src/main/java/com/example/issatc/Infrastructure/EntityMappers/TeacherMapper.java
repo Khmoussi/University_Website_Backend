@@ -14,13 +14,18 @@ import java.util.List;
 public class TeacherMapper extends UserMapper {
     @Column(unique = true)
     long cin;
-
+    private int time_limit;
 
     // reation with Seance
     @OneToMany(mappedBy = "teacher")
     List<SeanceMapper> seances =new ArrayList<>();
     @OneToMany(mappedBy = "teacher")
     List<RecordMapper> records;
+
+    @ManyToMany
+    @JoinTable(name = "teacher_subject",joinColumns = @JoinColumn(name = "email"),inverseJoinColumns = @JoinColumn(name = "subject_id"))
+
+    List<SubjectMapper> subjects;
 
 
 
@@ -60,6 +65,11 @@ public class TeacherMapper extends UserMapper {
     public TeacherMapper(String email, String firstName, String lastName,  Role role, long cin) {
         super(email, firstName, lastName,  role);
         this.cin = cin;
+    }
+    public TeacherMapper(String email, String firstName, String lastName,  Role role, long cin,int time_limit) {
+        super(email, firstName, lastName,  role);
+        this.cin = cin;
+        this.time_limit=time_limit;
     }
 
 }
