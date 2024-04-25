@@ -6,10 +6,13 @@ import lombok.Data;
 public class Group {
     int id;
     String name;
+    String sectorName;
 
-    public Group(int id, String name) {
+
+    public Group(int id, String name,String sectorName) {
         this.id = id;
         this.name = name;
+        this.sectorName=sectorName;
     }
     public Group() {
 

@@ -7,7 +7,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface JpaGroupRepository extends JpaRepository<GroupMapper,Integer> {
-    @Query(value = "SELECT new com.example.issatc.Entities.Group(g.id,g.groupName)  FROM GroupMapper g WHERE g.id IN (SELECT s.group.id FROM student s WHERE s.sector.name =:sectorId)")
+    @Query(value = "SELECT new com.example.issatc.Entities.Group(g.id,g.groupName,:sectorId)  FROM GroupMapper g WHERE g.id IN (SELECT s.group.id FROM student s WHERE s.sector.name =:sectorId)")
     List<Group> getGroupsBySector(@Param("sectorId") String sectorId);
 
+   @Query(value = "select distinct sector_id from student where group_id =:id ",nativeQuery = true)
+    String getSectorNameById(@Param("id") int id);
 }

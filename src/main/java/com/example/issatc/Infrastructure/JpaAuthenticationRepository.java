@@ -48,4 +48,8 @@ public interface JpaAuthenticationRepository extends JpaRepository<UserMapper,St
 
    @Query("select count(*) from user where email =:email and password is not null ")
     int hasAccount(@Param("email") String email);
+   @Modifying
+   @Transactional
+   @Query(value = "update user u set u.role =:roleNum where email =:email" ,nativeQuery = true)
+    void updateRole(@Param("email") String email ,@Param("roleNum") int roleNum);
 }

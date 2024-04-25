@@ -1,12 +1,11 @@
 package com.example.issatc.UseCases;
 
-import com.example.issatc.Entities.Departement;
-import com.example.issatc.Entities.Group;
+import com.example.issatc.Entities.*;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
+import com.example.issatc.Entities.Responses.TeacherSchedule;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
-import com.example.issatc.Entities.Sector;
-import com.example.issatc.Entities.Subject;
 import com.example.issatc.Ports.DataRepository;
 import com.example.issatc.Ports.DataServicePort;
 
@@ -64,6 +63,33 @@ public class DataService implements DataServicePort {
     public List<SubjectWithGroups> getTeacherSubjectGroups(String email) {
       return   this.dataRepository.getTeacherSubjectsGroups(email);
 
+    }
+
+    @Override
+    public boolean saveSeances(String email, List<Seance> seanceList) {
+       if(        this.dataRepository.saveSeances(email,seanceList)==seanceList.size())
+        return true;
+       return false;
+    }
+
+    @Override
+    public List<TeacherSchedule> getTeacherSchedule(String email) {
+       return this.dataRepository.getTeacherSchedule(email);
+    }
+
+    @Override
+    public boolean groupExists(int groupId) {
+        return this.dataRepository.groubExistsById(groupId);
+    }
+
+    @Override
+    public List<GroupSchedule> getGroupSchedule(int groupId) {
+        return this.dataRepository.getGroupSchedule(groupId);
+    }
+
+    @Override
+    public int getStudentGroup(String email) {
+        return this.dataRepository.getStudentGroup(email);
     }
 
 

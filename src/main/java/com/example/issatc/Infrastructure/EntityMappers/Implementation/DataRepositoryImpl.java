@@ -1,12 +1,11 @@
 package com.example.issatc.Infrastructure.EntityMappers.Implementation;
 
-import com.example.issatc.Entities.Departement;
-import com.example.issatc.Entities.Group;
+import com.example.issatc.Entities.*;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
+import com.example.issatc.Entities.Responses.TeacherSchedule;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
-import com.example.issatc.Entities.Sector;
-import com.example.issatc.Entities.Subject;
 import com.example.issatc.Infrastructure.EntityMappers.*;
 import com.example.issatc.Infrastructure.JpaSectorRepository;
 import com.example.issatc.Ports.DataRepository;
@@ -28,6 +27,7 @@ public class DataRepositoryImpl implements DataRepository {
     private final JpaStudentRepository studentRepository;
     private final JpaDepartmentRepository departmentRepository;
     private final JpaSectorRepository sectorRepository;
+    private final JpaSeanceRepository seanceRepository;
     @Override
     public List<TeacherWithDepResponse> getAllTeachers() {
         return this.teacherRepository.getAllTeachers();
@@ -129,6 +129,56 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
 
 
     }
+
+   @Transactional
+    @Override
+    public int saveSeances(String email, List<Seance> seanceList) {
+        int i=0;
+        for (Seance s:seanceList
+             ) {
+            this.seanceRepository.saveSeance(email,s.getDay(),s.getSeanceNumb(),s.getGroupId(),s.getClassRoomId(),s.getSubjectId());
+        i++;
+        }
+        return i;
+    }
+
+
+
+    @Override
+    public boolean groubExistsById(int groupId) {
+        return this.groupRepository.existsById(groupId);
+    }
+
+    @Override
+    public List<GroupSchedule> getGroupSchedule(int groupId) {
+        List<SeanceMapper> seanceMappers =this.seanceRepository.getSeancesByGroupId(groupId);
+        List<GroupSchedule> list=new ArrayList<>();
+        for (SeanceMapper seance:seanceMappers
+             ) {
+
+            list.add(new GroupSchedule(seance.getClassRoom().getName(),seance.getTeacher().getFirstName(),seance.getTeacher().getLastName(),seance.getGroup().getGroupName(),seance.getSeanceNumb(),seance.getDay()));
+        }
+        return list;
+    }
+
+    @Override
+    public int getStudentGroup(String email) {
+        return this.getStudentGroup(email);
+    }
+
+    @Override
+    public List<TeacherSchedule> getTeacherSchedule(String email) {
+
+        List<SeanceMapper> seanceMappers =this.seanceRepository.getSeancesByTeacherId(email);
+        List<TeacherSchedule> teacherScheduleList =new ArrayList<>();
+        for (SeanceMapper seance:seanceMappers
+        ) {
+            String sectorName=this.groupRepository.getSectorNameById(seance.getGroup().getId());
+            teacherScheduleList.add(new TeacherSchedule(seance.getClassRoom().getName(),seance.getGroup().getGroupName(),sectorName,seance.getSeanceNumb(),seance.getDay()));
+        }
+        return teacherScheduleList;
+    }
+
     List<Group> getGroupsBySector(SectorMapper sector){
 return this.groupRepository.getGroupsBySector(sector.getName());
     }

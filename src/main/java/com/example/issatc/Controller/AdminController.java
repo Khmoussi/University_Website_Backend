@@ -128,15 +128,19 @@ public class AdminController {
     @PutMapping("/modifyTeacherListing")
 
     ResponseEntity<?> modifyTeacherListing(@RequestBody TeacherWithDepRequest request){
-
-        TeacherWithDepRequest r=request;
-       if( this.authenticationService.modifyTeacherAccountNoPsd(request.getFirstName(),request.getLastName(),request.getEmail(),request.getCin(),request.getPhoneNum())
-   &&
-        this.authenticationService.modifyTeacherDep(request.getEmail(),request.getDepartmentName()))
+try {
+    TeacherWithDepRequest r = request;
+    if (this.authenticationService.modifyTeacherAccountNoPsd(request.getFirstName(), request.getLastName(), request.getEmail(), request.getCin(), request.getPhoneNum())
+            &&
+            this.authenticationService.modifyTeacherDep(request.getEmail(), request.getDepartmentName()))
 
         return ResponseEntity.ok().body("modification succeded");
-        return ResponseEntity.badRequest().body("modification failed");
+    return ResponseEntity.badRequest().body("modification failed");
+}catch (Exception e){
+    e.printStackTrace();
+    return ResponseEntity.badRequest().body("modification failed");
 
+}
 
     }
 
@@ -194,19 +198,10 @@ ResponseEntity<?> getDepartments(){
     }
 
 
- @GetMapping ("/gestionEmploie")
-    ResponseEntity<?> getTeacherSubjectGroups(@RequestBody  ResetRequest request){
-        try {
-            if (request.getEmail().equals("") || request == null || request.getEmail() == null)
-                return ResponseEntity.badRequest().body("empty mail");
 
-            return ResponseEntity.ok().body(this.dataService.getTeacherSubjectGroups(request.getEmail()));
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("empty mail");
 
-        }
-    }
+
+
 
 
 

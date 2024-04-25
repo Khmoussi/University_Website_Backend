@@ -2,8 +2,11 @@ package com.example.issatc.Ports;
 
 import com.example.issatc.Entities.Departement;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
+import com.example.issatc.Entities.Responses.TeacherSchedule;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
+import com.example.issatc.Entities.Seance;
 import com.example.issatc.Entities.Sector;
 import org.springframework.http.ResponseEntity;
 
@@ -21,4 +24,14 @@ public interface DataServicePort {
 
     List<Sector> getSectors();
     List<SubjectWithGroups>getTeacherSubjectGroups(String email);
+
+    boolean saveSeances(String email, List<Seance> seanceList);
+
+    List<TeacherSchedule> getTeacherSchedule(String email);
+
+    boolean groupExists(int groupID);
+
+    List<GroupSchedule> getGroupSchedule(int groupId);
+
+    int getStudentGroup(String email);
 }

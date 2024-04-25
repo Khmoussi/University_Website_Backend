@@ -37,6 +37,9 @@ public class JwtAuthenticationService {
         return  RegisterResponse.builder().accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .roleName(user.getRole().name())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .Lastname(user.getLastName())
                 .build();
     }
     public  AuthenticationResponse authenticate(String email,String password) throws Exception {

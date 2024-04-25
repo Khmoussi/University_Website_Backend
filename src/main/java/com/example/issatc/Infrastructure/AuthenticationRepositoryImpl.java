@@ -7,6 +7,7 @@ import com.example.issatc.Entities.Requests.UserRequest;
 import com.example.issatc.Infrastructure.EntityMappers.*;
 import com.example.issatc.Ports.AuthenticationRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -133,19 +134,28 @@ try{
              departmentId= this.departmentRepository.getIdByName(departmentName);
         if(this.chefDepartmentRepository.existsByDepId(departmentId)==0 && this.chefDepartmentRepository.existsById(email) )
         return  this.authenticationRepository.modifyTeacherDep(email,departmentId)>=1;
-        if(this.chefDepartmentRepository.existsByDepId(departmentId)==0 )
-        return (this.chefDepartmentRepository.assignChef(email,departmentId)>=1);
+        if(this.chefDepartmentRepository.existsByDepId(departmentId)==0 ) {
+            this.authenticationRepository.updateRole(email,3);
+            return (this.chefDepartmentRepository.assignChef(email, departmentId) >= 1);
+        }
         return false;
     }
 
+    @Transactional
     @Override
     public int saveChefDepartment(DepartmentChefRequest request) {
 
         if(this.authenticationRepository.hasAccount(request.getEmail())>0) {
 
             int id = this.departmentRepository.getIdByName(request.getDepartmentName());
-            if (this.authenticationTeacherRepository.existsById(request.getEmail()))
-             return    this.chefDepartmentRepository.assignChef(request.getEmail(), id);
+            if (this.authenticationTeacherRepository.existsById(request.getEmail())) {
+               /*UserMapper userMapper=this.authenticationRepository.findById(request.getEmail()).orElseThrow();
+                userMapper.setRole(Role.DEPARTEMENTCHEF);
+
+                */
+                this.authenticationRepository.updateRole(request.getEmail(),3);
+                return this.chefDepartmentRepository.assignChef(request.getEmail(), id);
+            }
         }
         return 0;
     }
@@ -159,8 +169,15 @@ if(result>0)
     }
 
     @Override
+    @Transactional
     public void deleteChefDepAssignement(String email) {
+        this.authenticationRepository.updateRole(email,1);
         this.chefDepartmentRepository.deleteChefDepAssignement(email);
+    }
+
+    @Override
+    public boolean studentExistsById(String email) {
+        return this.authenticationStudentRepository.existsById(email);
     }
 
 
@@ -342,8 +359,8 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
         //2
          list = new ArrayList<>();
          teacher = this.teacherRepository.findById("teacher2@gmail.com").orElseThrow();
-         s1 = this.subjectRepository.findById(52).orElseThrow();
-         s2 = this.subjectRepository.findById(53).orElseThrow();
+         s1 = this.subjectRepository.findById(1).orElseThrow();
+         s2 = this.subjectRepository.findById(2).orElseThrow();
 
         list.add(s1); // Add the SubjectMapper object to the list
         list.add(s2);
@@ -352,8 +369,8 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
         //3
         list = new ArrayList<>();
         teacher = this.teacherRepository.findById("teacher3@gmail.com").orElseThrow();
-        s1 = this.subjectRepository.findById(57).orElseThrow();
-        s2 = this.subjectRepository.findById(58).orElseThrow();
+        s1 = this.subjectRepository.findById(3).orElseThrow();
+        s2 = this.subjectRepository.findById(4).orElseThrow();
 
         list.add(s1); // Add the SubjectMapper object to the list
         list.add(s2);
@@ -363,8 +380,8 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
         //4
         list = new ArrayList<>();
         teacher = this.teacherRepository.findById("teacher4@gmail.com").orElseThrow();
-        s1 = this.subjectRepository.findById(77).orElseThrow();
-        s2 = this.subjectRepository.findById(78).orElseThrow();
+        s1 = this.subjectRepository.findById(5).orElseThrow();
+        s2 = this.subjectRepository.findById(6).orElseThrow();
 
         list.add(s1); // Add the SubjectMapper object to the list
         list.add(s2);
@@ -375,8 +392,8 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
 
         list = new ArrayList<>();
         teacher = this.teacherRepository.findById("teacher5@gmail.com").orElseThrow();
-        s1 = this.subjectRepository.findById(120).orElseThrow();
-        s2 = this.subjectRepository.findById(121).orElseThrow();
+        s1 = this.subjectRepository.findById(7).orElseThrow();
+        s2 = this.subjectRepository.findById(8).orElseThrow();
 
         list.add(s1); // Add the SubjectMapper object to the list
         list.add(s2);

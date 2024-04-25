@@ -41,4 +41,6 @@ public interface AuthenticationRepository {
     boolean hasAccount(String email);
 
     void deleteChefDepAssignement(String email);
+
+    boolean studentExistsById(String email);
 }

@@ -1,9 +1,10 @@
 package com.example.issatc.Infrastructure.EntityMappers;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.io.Serializable;
-
+@Data
 @Entity(name = "seance")
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"group_id", "day", "seanceNumb"}),

@@ -23,4 +23,6 @@ public interface AuthenticationServicePort {
     boolean modifyTeacherDep(String email, String departmentName);
 
     int saveDepartmentChef(DepartmentChefRequest request);
+
+    boolean studentExistsById(String email);
 }

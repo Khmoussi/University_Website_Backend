@@ -104,6 +104,7 @@ return result;
     public boolean modifyTeacherDep(String email, String departmentName) {
         if(this.authenticationRepository.hasAccount(email)) {
             if (departmentName != null && (departmentName.equals("") == false))
+
                 this.authenticationRepository.modifyTeacherDep(email, departmentName);
                 // delete department if exists
             else this.authenticationRepository.deleteChefDepAssignement(email);
@@ -122,6 +123,11 @@ return result;
 
     return this.authenticationRepository.saveChefDepartment(request);
 
+    }
+
+    @Override
+    public boolean studentExistsById(String email) {
+        return this.authenticationRepository.studentExistsById(email);
     }
 
     public void test(){

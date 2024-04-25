@@ -17,7 +17,7 @@ public class SectorMapper {
     List<StudentMapper> students;
 
 
-    @ManyToMany
+    @ManyToMany( cascade = CascadeType.ALL)
             @JoinTable(name = "sector_subject",joinColumns = @JoinColumn(name = "sector_id"),inverseJoinColumns = @JoinColumn(name = "subject_id"))
     List<SubjectMapper>subjects;
 

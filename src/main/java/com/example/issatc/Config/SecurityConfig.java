@@ -55,6 +55,8 @@ public class SecurityConfig {
                 .hasAuthority(STUDENT.name())// or                 .hasAuthority("ROLE_STUDENT")
                 .requestMatchers("/teacher/**")
                 .hasRole(TEACHER.name())
+                .requestMatchers("/chef/**")
+                .hasRole(DEPARTEMENTCHEF.name())
                 .anyRequest()
                 .authenticated()
                 .and()

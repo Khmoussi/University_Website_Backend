@@ -7,6 +7,10 @@ import lombok.Data;
 @Builder
 public class RegisterResponse {
 
+    private String email;
+    private String firstName;
+    private String Lastname;
+
     private String roleName;
 
     private String accessToken;

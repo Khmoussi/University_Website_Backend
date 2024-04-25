@@ -19,6 +19,8 @@ public class IssatcApplication {
 private final JpaTeacherRepository jpaTeacherRepository;
 	private final JpaGroupRepository groupRepository;
 	private final JpaSubjectRepository subjectRepository;
+	private final JpaSeanceRepository seanceRepository;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(IssatcApplication.class, args);
