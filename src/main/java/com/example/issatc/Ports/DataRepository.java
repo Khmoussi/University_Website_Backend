@@ -2,6 +2,8 @@ package com.example.issatc.Ports;
 
 import com.example.issatc.Entities.*;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Requests.StudentPresenceRequest;
+import com.example.issatc.Entities.Requests.SubjectAbsence;
 import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherSchedule;
@@ -15,7 +17,7 @@ public interface DataRepository {
 
     List<TeacherWithDepResponse> getChefs();
 
-    void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames);
+    void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId);
 
     Map<String, Integer> saveGroups(List<GroupsBySectorRequest> groupName);
 
@@ -39,4 +41,8 @@ public interface DataRepository {
     List<GroupSchedule> getGroupSchedule(int groupId);
 
     int getStudentGroup(String email);
+
+    boolean markPresence(StudentPresenceRequest request);
+
+    List<SubjectAbsence> getAbsence(String email);
 }

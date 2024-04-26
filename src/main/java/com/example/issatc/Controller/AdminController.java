@@ -162,9 +162,10 @@ return ResponseEntity.ok().body(this.dataService.getTeachers());
 
     ResponseEntity<?> assigningGroupsBySector(@RequestBody AssigningGroupsBySectorRequest request){
 
+
         try {
             Map<String,Integer> map=this.dataService.saveGroups(request.getList());
-            this.dataService.assigningGroups(request.getList(),map);
+            this.dataService.assigningGroups(request.getList(),map,request.getSectorId());
             return ResponseEntity.ok().body("saved success");
 
         }catch (NullPointerException e){

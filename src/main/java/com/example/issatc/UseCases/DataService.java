@@ -2,6 +2,8 @@ package com.example.issatc.UseCases;
 
 import com.example.issatc.Entities.*;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Requests.StudentPresenceRequest;
+import com.example.issatc.Entities.Requests.SubjectAbsence;
 import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherSchedule;
@@ -37,9 +39,9 @@ public class DataService implements DataServicePort {
     }
 
     @Override
-    public void assigningGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames) {
+    public void assigningGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId) {
 
-        this.dataRepository.assignGroups(list,groupNames);
+        this.dataRepository.assignGroups(list,groupNames,sectorId);
 
     }
 
@@ -90,6 +92,16 @@ public class DataService implements DataServicePort {
     @Override
     public int getStudentGroup(String email) {
         return this.dataRepository.getStudentGroup(email);
+    }
+
+    @Override
+    public boolean markPresence(StudentPresenceRequest request) {
+       return this.dataRepository.markPresence(request);
+    }
+
+    @Override
+    public List<SubjectAbsence> getAbsence(String email) {
+        return this.dataRepository.getAbsence(email);
     }
 
 

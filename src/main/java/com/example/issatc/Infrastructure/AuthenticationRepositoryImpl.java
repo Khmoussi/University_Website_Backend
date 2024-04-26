@@ -405,39 +405,34 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
 
         //assigning subjects to sector
 //1
-        List<SubjectMapper> list4 =this.subjectRepository.findAllByName("Matiere1");
+        List<SubjectMapper> matiere1 =this.subjectRepository.findAllByName("Matiere1");
+        List<SubjectMapper> matiere2  =this.subjectRepository.findAllByName("Matiere2");
+        List<SubjectMapper> matiere3  =this.subjectRepository.findAllByName("Matiere3");
+        List<SubjectMapper> matiere4  =this.subjectRepository.findAllByName("Matiere4");
+        List<SubjectMapper> matiere5  =this.subjectRepository.findAllByName("Matiere5");
+        List<SubjectMapper> matiere6  =this.subjectRepository.findAllByName("Matiere6");
+
+
+
+
         SectorMapper sectorMapper=this.sectorRepository.findById("Ing A1").orElseThrow();
-        sectorMapper.setSubjects(list4);
+        sectorMapper.setSubjects(matiere1);
         this.sectorRepository.save(sectorMapper);
-
-        //2
-        list4 =this.subjectRepository.findAllByName("Matiere2");
-         sectorMapper=this.sectorRepository.findById("Ing A1").orElseThrow();
-        sectorMapper.setSubjects(list4);
-        this.sectorRepository.save(sectorMapper);
-
-        list4 =this.subjectRepository.findAllByName("Matiere2");
         sectorMapper=this.sectorRepository.findById("Ing A2").orElseThrow();
-        sectorMapper.setSubjects(list4);
+        sectorMapper.setSubjects(matiere2);
         this.sectorRepository.save(sectorMapper);
-
-
-        list4 =this.subjectRepository.findAllByName("Matiere3");
-        sectorMapper=this.sectorRepository.findById("Ing A2").orElseThrow();
-        sectorMapper.setSubjects(list4);
-        this.sectorRepository.save(sectorMapper);
-
-
-
-        list4 =this.subjectRepository.findAllByName("Matiere4");
         sectorMapper=this.sectorRepository.findById("Ing A3").orElseThrow();
-        sectorMapper.setSubjects(list4);
+        sectorMapper.setSubjects(matiere3);
+        this.sectorRepository.save(sectorMapper);
+        sectorMapper=this.sectorRepository.findById("Prepa A1").orElseThrow();
+        sectorMapper.setSubjects(matiere4);
+        this.sectorRepository.save(sectorMapper);
+        sectorMapper=this.sectorRepository.findById("Prepa A2").orElseThrow();
+        sectorMapper.setSubjects(matiere5);
         this.sectorRepository.save(sectorMapper);
 
-        list4 =this.subjectRepository.findAllByName("Matiere5");
-        sectorMapper=this.sectorRepository.findById("Ing A3").orElseThrow();
-        sectorMapper.setSubjects(list4);
-        this.sectorRepository.save(sectorMapper);
+
+
     }
 
 

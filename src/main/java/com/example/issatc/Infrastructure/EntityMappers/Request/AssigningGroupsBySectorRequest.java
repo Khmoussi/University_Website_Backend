@@ -9,5 +9,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AssigningGroupsBySectorRequest {
 
+    String sectorId;
     List<GroupsBySectorRequest> list ;
 }

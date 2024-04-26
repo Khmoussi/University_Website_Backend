@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity(name = "record")
+@IdClass(RecordMapper.RecordId.class)
+
 public class RecordMapper {
     private int absenceNum;
     private int noteNum;

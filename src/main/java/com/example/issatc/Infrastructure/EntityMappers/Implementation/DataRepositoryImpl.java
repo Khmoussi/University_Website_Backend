@@ -2,11 +2,15 @@ package com.example.issatc.Infrastructure.EntityMappers.Implementation;
 
 import com.example.issatc.Entities.*;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Requests.StudentPresence;
+import com.example.issatc.Entities.Requests.StudentPresenceRequest;
+import com.example.issatc.Entities.Requests.SubjectAbsence;
 import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherSchedule;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
 import com.example.issatc.Infrastructure.EntityMappers.*;
+import com.example.issatc.Infrastructure.JpaRecordRepository;
 import com.example.issatc.Infrastructure.JpaSectorRepository;
 import com.example.issatc.Ports.DataRepository;
 import jakarta.transaction.Transactional;
@@ -28,6 +32,8 @@ public class DataRepositoryImpl implements DataRepository {
     private final JpaDepartmentRepository departmentRepository;
     private final JpaSectorRepository sectorRepository;
     private final JpaSeanceRepository seanceRepository;
+    private final JpaRecordRepository recordRepository;
+
     @Override
     public List<TeacherWithDepResponse> getAllTeachers() {
         return this.teacherRepository.getAllTeachers();
@@ -40,14 +46,14 @@ public class DataRepositoryImpl implements DataRepository {
 
     @Override
     @Transactional
-    public void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames) {
+    public void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId) {
         int i=0;
 
        // System.out.println("listsize^p " +list.size());
         while(i< list.size()){
             int j=0;
             while (j<list.get(i).getListStudents().size()) {
-
+this.studentRepository.existsInSector(sectorId);
                 this.studentRepository.updateStudentGroup(list.get(i).getListStudents().get(j), groupNames.get(list.get(i).getGroupName()));
             j++;
           // System.out.println("grou^p " +groupNames.get(list.get(1).getGroupName()));
@@ -164,6 +170,47 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
     @Override
     public int getStudentGroup(String email) {
         return this.getStudentGroup(email);
+    }
+
+    @Transactional
+    @Override
+    public boolean markPresence(StudentPresenceRequest request) {
+
+        int subjectId= request.getSubjectId();
+        String teacherMail=request.getTeacherId();
+
+        List<StudentPresence> list= request.getStudents();
+
+        for (StudentPresence s:list
+             ) {
+            if(!s.isPresence())
+                try {
+                    this.recordRepository.setPresence(s.getEmail(), subjectId, teacherMail);
+                }catch (Exception e){
+                    return  false;
+                }
+        }
+        return true;
+    }
+
+    @Override
+    public List<SubjectAbsence> getAbsence(String email) {
+        List<SubjectAbsence> list=this.recordRepository.getRecordByStudent(email);
+        List<SubjectMapper>  s= getSubjectsByStudent( email);
+        for (SubjectAbsence subjectAbsence:list
+             ) {
+            for (SubjectMapper su:s
+                 ) {
+                if(!su.getName().equals(subjectAbsence.getSubjectName()))
+                    list.add(new SubjectAbsence(su.getName(),0,su.getType(),su.getSemester()));
+
+            }
+        }
+        return list;
+    }
+    List<SubjectMapper> getSubjectsByStudent(String email){
+        SectorMapper s=this.sectorRepository.getSectorByStudentId(email);
+       return  s.getSubjects();
     }
 
     @Override

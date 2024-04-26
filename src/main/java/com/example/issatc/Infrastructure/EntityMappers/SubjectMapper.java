@@ -24,6 +24,7 @@ public class SubjectMapper {
     List<SeanceMapper> seances =new ArrayList<>();
 
     @ManyToMany(mappedBy = "subjects")
+
     List<SectorMapper> sectors;
 
     @OneToMany(mappedBy = "subject")

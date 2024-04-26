@@ -2,6 +2,8 @@ package com.example.issatc.Ports;
 
 import com.example.issatc.Entities.Departement;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
+import com.example.issatc.Entities.Requests.StudentPresenceRequest;
+import com.example.issatc.Entities.Requests.SubjectAbsence;
 import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherSchedule;
@@ -16,7 +18,7 @@ import java.util.Map;
 public interface DataServicePort {
     List<TeacherWithDepResponse> getTeachers();
 
-    void assigningGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames);
+    void assigningGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId);
 
     Map<String, Integer> saveGroups(List<GroupsBySectorRequest>List);
 
@@ -34,4 +36,8 @@ public interface DataServicePort {
     List<GroupSchedule> getGroupSchedule(int groupId);
 
     int getStudentGroup(String email);
+
+    boolean markPresence(StudentPresenceRequest request);
+
+    List<SubjectAbsence> getAbsence(String email);
 }

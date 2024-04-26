@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**")
                 .hasRole(ADMIN.name())
                 .requestMatchers("/student/**")
-                .hasAuthority(STUDENT.name())// or                 .hasAuthority("ROLE_STUDENT")
+                .hasRole(STUDENT.name())// or                 .hasAuthority("ROLE_STUDENT")
                 .requestMatchers("/teacher/**")
                 .hasRole(TEACHER.name())
                 .requestMatchers("/chef/**")
