@@ -11,6 +11,7 @@ import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
 import com.example.issatc.Ports.DataRepository;
 import com.example.issatc.Ports.DataServicePort;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -102,6 +103,21 @@ public class DataService implements DataServicePort {
     @Override
     public List<SubjectAbsence> getAbsence(String email) {
         return this.dataRepository.getAbsence(email);
+    }
+
+    @Override
+    public List<Student> getStudentBySector(String sectorId) {
+        return this.dataRepository.getStudentBySector(sectorId);
+    }
+
+    @Override
+    public boolean sectorExists(String sectorId) {
+        return this.dataRepository.sectorExists(sectorId);
+    }
+
+    @Override
+    public List<Classroom> getClassRooms() {
+        return this.dataRepository.getClassRooms();
     }
 
 

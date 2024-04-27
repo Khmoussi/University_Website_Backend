@@ -35,6 +35,7 @@ public class AuthenticationRepositoryImpl implements AuthenticationRepository {
     private final JpaSectorRepository sectorRepository;
     public final JpaSubjectRepository subjectRepository;
     private final JpaTeacherRepository teacherRepository;
+    private final JpaClassRoomRepository classRoomRepository;
 
     @Autowired
     JavaMailSender javaMailSender;
@@ -123,7 +124,7 @@ try{
         }    }
 
     @Override
-    public boolean modifyTeacherAccountNoPsd(String firstName, String lastName, String email, long numTelephone, long cin) {
+    public boolean modifyTeacherAccountNoPsd(String firstName, String lastName, String email, long cin, long numTelephone) {
        if( this.authenticationRepository.modifyTeacherAccountNoPsd(firstName,lastName,email,numTelephone,cin)>0)
            return true;
        return false;
@@ -317,8 +318,8 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
 
       }
         for(int i =1 ;i<=5;i++){
-            if(!authenticationRepository.existsById("teacher"+String.valueOf(i)+"@gmail.com"))
-                authenticationTeacherRepository.save(new TeacherMapper("teacher"+String.valueOf(i)+"@gmail.com","teacher"+String.valueOf(i)+"Firstname","teacher"+String.valueOf(i)+"Lastname",Role.TEACHER,i+13275684));
+            if(authenticationRepository.existsById("teacher"+String.valueOf(i)+"@gmail.com"))
+                authenticationTeacherRepository.save(new TeacherMapper("teacher"+String.valueOf(i)+"@gmail.com","teacher"+String.valueOf(i)+"Firstname","teacher"+String.valueOf(i)+"Lastname",Role.TEACHER,i+13275684,50));
 
 
         }
@@ -430,6 +431,18 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
         sectorMapper=this.sectorRepository.findById("Prepa A2").orElseThrow();
         sectorMapper.setSubjects(matiere5);
         this.sectorRepository.save(sectorMapper);
+
+        //creating classrooms
+
+        for(int i=1 ;i<=8;i++){
+
+            this.classRoomRepository.save( new ClassRoom(i ,"K"+String.valueOf(i)));
+            this.classRoomRepository.save( new ClassRoom(i+8 ,"M"+String.valueOf(i)));
+            this.classRoomRepository.save( new ClassRoom(i+16 ,"G"+String.valueOf(i)));
+            this.classRoomRepository.save( new ClassRoom(i+24 ,"I"+String.valueOf(i)));
+
+        }
+
 
 
 

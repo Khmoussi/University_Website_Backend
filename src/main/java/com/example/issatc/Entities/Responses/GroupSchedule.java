@@ -1,5 +1,8 @@
 package com.example.issatc.Entities.Responses;
 
+import lombok.Data;
+
+@Data
 public class GroupSchedule {
     String classRoomName;
     String teacherFirstName;

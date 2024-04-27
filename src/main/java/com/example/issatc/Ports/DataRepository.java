@@ -9,6 +9,7 @@ import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherSchedule;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface DataRepository {
 
     List<TeacherWithDepResponse> getChefs();
 
-    void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId);
+    void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId) ;
 
     Map<String, Integer> saveGroups(List<GroupsBySectorRequest> groupName);
 
@@ -45,4 +46,10 @@ public interface DataRepository {
     boolean markPresence(StudentPresenceRequest request);
 
     List<SubjectAbsence> getAbsence(String email);
+
+    List<Student> getStudentBySector(String sectorId);
+
+    boolean sectorExists(String sectorId);
+
+    List<Classroom> getClassRooms();
 }

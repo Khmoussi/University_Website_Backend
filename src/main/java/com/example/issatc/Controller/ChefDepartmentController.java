@@ -2,6 +2,7 @@ package com.example.issatc.Controller;
 
 import com.example.issatc.Entities.Group;
 import com.example.issatc.Entities.Requests.ResetRequest;
+import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.ScheduleRequest;
 import com.example.issatc.Infrastructure.EntityMappers.JpaTeacherRepository;
 import com.example.issatc.Infrastructure.EntityMappers.Request.GroupScheduleRequest;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +33,7 @@ public class ChefDepartmentController {
             return ResponseEntity.ok().body(this.dataService.getTeacherSubjectGroups(request.getEmail()));
         }catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("empty mail");
+            return ResponseEntity.badRequest().body("Wrong Email");
 
         }
     }
@@ -84,13 +87,19 @@ return ResponseEntity.ok(this.dataService.getTeacherSchedule(request.getEmail())
 
             try{
             int groupId=this.dataService.getStudentGroup(request.getEmail());
-            return ResponseEntity.ok().body(this.dataService.getGroupSchedule(groupId));
+            List<GroupSchedule> list  =this.dataService.getGroupSchedule(groupId);
+            System.out.println(list.get(0).getDay() +"wwwwwwww");
+            return ResponseEntity.ok().body(list);
         }catch (Exception e){
                 e.printStackTrace();
                 return ResponseEntity.badRequest().body("student do not have group yet");
 
             }
 
+    }
+    @GetMapping("/getClassRooms")
+    ResponseEntity<?>getClassRooms(){
+        return ResponseEntity.ok().body( this.dataService.getClassRooms());
     }
 
 

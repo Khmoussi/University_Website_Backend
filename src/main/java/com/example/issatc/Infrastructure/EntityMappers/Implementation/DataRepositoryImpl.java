@@ -16,7 +16,9 @@ import com.example.issatc.Ports.DataRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class DataRepositoryImpl implements DataRepository {
     private final JpaSectorRepository sectorRepository;
     private final JpaSeanceRepository seanceRepository;
     private final JpaRecordRepository recordRepository;
+    private final JpaClassRoomRepository classRoomRepository;
 
     @Override
     public List<TeacherWithDepResponse> getAllTeachers() {
@@ -46,15 +49,25 @@ public class DataRepositoryImpl implements DataRepository {
 
     @Override
     @Transactional
-    public void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId) {
+    public void assignGroups(List<GroupsBySectorRequest> list,Map<String, Integer> groupNames,String sectorId)  {
         int i=0;
 
        // System.out.println("listsize^p " +list.size());
         while(i< list.size()){
             int j=0;
             while (j<list.get(i).getListStudents().size()) {
-this.studentRepository.existsInSector(sectorId);
-                this.studentRepository.updateStudentGroup(list.get(i).getListStudents().get(j), groupNames.get(list.get(i).getGroupName()));
+if(this.studentRepository.existsInSector(sectorId,list.get(i).getListStudents().get(j))>0){
+    this.studentRepository.updateStudentGroup(list.get(i).getListStudents().get(j), groupNames.get(list.get(i).getGroupName()));
+
+}else {
+    try {
+        throw new SQLException("Throwing exception for demoing rollback");
+    }catch (Exception e){
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+    }
+
+}
             j++;
           // System.out.println("grou^p " +groupNames.get(list.get(1).getGroupName()));
             }
@@ -169,7 +182,7 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
 
     @Override
     public int getStudentGroup(String email) {
-        return this.getStudentGroup(email);
+        return this.studentRepository.getStudentGroup(email);
     }
 
     @Transactional
@@ -208,6 +221,22 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
         }
         return list;
     }
+
+    @Override
+    public List<Student> getStudentBySector(String sectorId) {
+        return  this.studentRepository.findBySectorId(sectorId);
+    }
+
+    @Override
+    public boolean sectorExists(String sectorId) {
+        return this.sectorRepository.existsById(sectorId);
+    }
+
+    @Override
+    public List<Classroom> getClassRooms() {
+        return this.classRoomRepository.getClassRoom();
+    }
+
     List<SubjectMapper> getSubjectsByStudent(String email){
         SectorMapper s=this.sectorRepository.getSectorByStudentId(email);
        return  s.getSubjects();

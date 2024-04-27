@@ -12,10 +12,10 @@ public interface JpaTeacherRepository  extends JpaRepository<TeacherMapper,Strin
 
    @Query("select  new com.example.issatc.Infrastructure.EntityMappers.ChefDepWithDepNameResponse(c.email , d.name) from chefDepartment c , department d where c.department.id= d.id")
    List<ChefDepWithDepNameResponse> getChefDepWithDepName();
-    @Query("select new com.example.issatc.Entities.Responses.TeacherWithDepResponse(c.lastName ,c.firstName ,c.email , c.phoneNumb , c.cin ) from teacher c   ")
+    @Query("select new com.example.issatc.Entities.Responses.TeacherWithDepResponse(c.lastName ,c.firstName ,c.email , c.phoneNumb , c.cin ,c.time_limit ) from teacher c   ")
 
     List<TeacherWithDepResponse> getAllTeachers();
-    @Query("select new com.example.issatc.Entities.Responses.TeacherWithDepResponse(c.lastName ,c.firstName ,c.email , c.phoneNumb ,c.cin,c.department.name ) from chefDepartment c   ")
+    @Query("select new com.example.issatc.Entities.Responses.TeacherWithDepResponse(c.lastName ,c.firstName ,c.email , c.phoneNumb ,c.cin,c.department.name,c.time_limit  ) from chefDepartment c   ")
 
     List<TeacherWithDepResponse> getChefs();
 
