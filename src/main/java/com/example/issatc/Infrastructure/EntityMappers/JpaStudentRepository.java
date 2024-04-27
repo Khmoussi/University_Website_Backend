@@ -26,9 +26,12 @@ public interface JpaStudentRepository extends JpaRepository<StudentMapper,String
 
     @Query("select count(*) from  student s where s.sector.name =:sectorId and s.numInscription =:numInscription")
     int existsInSector(@Param("sectorId") String sectorId ,@Param("numInscription") long numInscription);
-    @Query("select new com.example.issatc.Entities.Student(s.email ,s.lastName ,s.firstName ,s.numInscription,s.group.id,s.sector.name) from student s where s.sector.name =:sectorId")
+    @Query("select new com.example.issatc.Entities.Student(s.email ,s.lastName ,s.firstName ,s.numInscription,s.sector.name) from student s where s.sector.name =:sectorId")
 
     List<Student> findBySectorId(@Param("sectorId") String sectorId);
    @ Query("select g.group.id from student g where g.email =:email ")
     int getStudentGroup(@Param("email") String email);
+    @ Query("select new com.example.issatc.Entities.Student(s.email ,s.lastName ,s.firstName ,s.numInscription,s.group.id,s.sector.name) from student s where s.group.id =:groupId  ")
+
+    List<Student> getStudentByGroup(@Param("groupId") int groupID);
 }

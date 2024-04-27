@@ -52,4 +52,6 @@ public interface DataRepository {
     boolean sectorExists(String sectorId);
 
     List<Classroom> getClassRooms();
+
+    List<Student> getStudentByGroup(int groupID);
 }

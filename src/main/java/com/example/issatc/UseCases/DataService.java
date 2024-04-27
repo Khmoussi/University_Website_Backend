@@ -8,6 +8,7 @@ import com.example.issatc.Entities.Responses.GroupSchedule;
 import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherSchedule;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
+import com.example.issatc.Infrastructure.EntityMappers.Request.GroupScheduleRequest;
 import com.example.issatc.Ports.DataRepository;
 import com.example.issatc.Ports.DataServicePort;
 
@@ -118,6 +119,11 @@ public class DataService implements DataServicePort {
     @Override
     public List<Classroom> getClassRooms() {
         return this.dataRepository.getClassRooms();
+    }
+
+    @Override
+    public List<Student> getStudentByGroup(GroupScheduleRequest request) {
+        return this.dataRepository.getStudentByGroup(request.getGroupID());
     }
 
 

@@ -9,6 +9,7 @@ import com.example.issatc.Entities.Responses.SubjectWithGroups;
 import com.example.issatc.Entities.Responses.TeacherSchedule;
 import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
 import com.example.issatc.Infrastructure.EntityMappers.ClassRoom;
+import com.example.issatc.Infrastructure.EntityMappers.Request.GroupScheduleRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.SQLException;
@@ -46,4 +47,6 @@ public interface DataServicePort {
     boolean sectorExists(String sectorId);
 
     List<Classroom> getClassRooms();
+
+    List<Student> getStudentByGroup(GroupScheduleRequest request);
 }

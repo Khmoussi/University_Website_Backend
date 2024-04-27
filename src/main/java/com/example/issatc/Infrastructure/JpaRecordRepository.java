@@ -14,8 +14,13 @@ public interface JpaRecordRepository extends JpaRepository<RecordMapper,RecordMa
   @Transactional
   @Modifying
    @Query("update  record r set r.absenceNum =r.absenceNum + 1 where r.teacher.email =:teacherMail and r.subject.id =:subjectId and student.email =:email  ")
-    void setPresence(@Param("email") String email, @Param("subjectId")int subjectId, @Param("teacherMail")String teacherMail);
+    int setPresence(@Param("email") String email, @Param("subjectId")int subjectId, @Param("teacherMail")String teacherMail);
 
-  @Query ("select new com.example.issatc.Entities.Requests.SubjectAbsence(r.subject.name , r.absenceNum , r.subject.type ,r.subject.semester) from record r where r.student.email =:email ")
+    @Transactional
+    @Modifying
+    @Query(value = "insert into record (absence_num,note_num,subject_id,teacher_id,student_id)  values(1,-1,:subjectId,:teacherMail,:email)  ",nativeQuery = true)
+    void createPresence(@Param("email") String email, @Param("subjectId")int subjectId, @Param("teacherMail")String teacherMail);
+
+    @Query ("select new com.example.issatc.Entities.Requests.SubjectAbsence(r.subject.name , r.absenceNum , r.subject.type ,r.subject.semester) from record r where r.student.email =:email ")
   List<SubjectAbsence> getRecordByStudent(@Param("email") String email);
 }

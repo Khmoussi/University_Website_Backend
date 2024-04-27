@@ -27,8 +27,7 @@ public static class RecordId implements Serializable{
     private TeacherMapper teacher;
     private SubjectMapper subject;
     private StudentMapper student;
-    private int absenceNum;
-    private int noteNum;
+
 
 
 

@@ -198,7 +198,10 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
              ) {
             if(!s.isPresence())
                 try {
-                    this.recordRepository.setPresence(s.getEmail(), subjectId, teacherMail);
+
+                     if(   this.recordRepository.setPresence(s.getEmail(), subjectId, teacherMail)==0)
+                         this.recordRepository.createPresence(s.getEmail(), subjectId, teacherMail);
+
                 }catch (Exception e){
                     return  false;
                 }
@@ -235,6 +238,11 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
     @Override
     public List<Classroom> getClassRooms() {
         return this.classRoomRepository.getClassRoom();
+    }
+
+    @Override
+    public List<Student> getStudentByGroup(int groupID) {
+        return this.studentRepository.getStudentByGroup(groupID);
     }
 
     List<SubjectMapper> getSubjectsByStudent(String email){

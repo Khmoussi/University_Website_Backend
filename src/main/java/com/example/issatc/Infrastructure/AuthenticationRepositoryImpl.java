@@ -318,7 +318,7 @@ boolean result =(this.resetPasswordRepository.verifyCode(newPasswordRequest.getE
 
       }
         for(int i =1 ;i<=5;i++){
-            if(authenticationRepository.existsById("teacher"+String.valueOf(i)+"@gmail.com"))
+            if(!authenticationRepository.existsById("teacher"+String.valueOf(i)+"@gmail.com"))
                 authenticationTeacherRepository.save(new TeacherMapper("teacher"+String.valueOf(i)+"@gmail.com","teacher"+String.valueOf(i)+"Firstname","teacher"+String.valueOf(i)+"Lastname",Role.TEACHER,i+13275684,50));
 
 
