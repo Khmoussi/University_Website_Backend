@@ -25,8 +25,9 @@ public class ChefDepartmentController {
 
 
     @GetMapping("/gestionEmploie")
-    ResponseEntity<?> getTeacherSubjectGroups(@RequestBody ResetRequest request){
+    ResponseEntity<?> getTeacherSubjectGroups(@RequestParam String email){
         try {
+            ResetRequest request=new ResetRequest(email);
             if (request.getEmail().equals("") || request == null || request.getEmail() == null)
                 return ResponseEntity.badRequest().body("empty mail");
 
@@ -59,8 +60,9 @@ public class ChefDepartmentController {
     }
 
     @GetMapping("/getTeacherSchedule")
-    ResponseEntity<?> getTeacherSchedule(@RequestBody ResetRequest request){
+    ResponseEntity<?> getTeacherSchedule(@RequestParam String email){
 
+        ResetRequest request=new ResetRequest(email);
 
         if (request.getEmail().equals("") || request == null || request.getEmail() == null)
             return ResponseEntity.badRequest().body("empty mail");
@@ -77,8 +79,10 @@ return ResponseEntity.ok(this.dataService.getTeacherSchedule(request.getEmail())
 
     }
 
-    @GetMapping("/getGroupSchedule")
-    ResponseEntity<?> getGroupSchedule(@RequestBody ResetRequest request ){
+   /* @GetMapping("/getGroupSchedule")
+    ResponseEntity<?> getGroupSchedule(@RequestParam String email ){
+        ResetRequest request=new ResetRequest(email);
+
         if (request.getEmail().equals("") || request == null || request.getEmail() == null)
             return ResponseEntity.badRequest().body("empty mail");
 
@@ -97,6 +101,8 @@ return ResponseEntity.ok(this.dataService.getTeacherSchedule(request.getEmail())
             }
 
     }
+
+    */
     @GetMapping("/getClassRooms")
     ResponseEntity<?>getClassRooms(){
         return ResponseEntity.ok().body( this.dataService.getClassRooms());

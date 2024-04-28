@@ -44,18 +44,18 @@ public class TeacherController {
         return ResponseEntity.ok().body("updates are made successfully");
 }catch (UnauthorizedException e) {
     e.printStackTrace();
-    return ResponseEntity.internalServerError().body("Unauthorized User");
+    return ResponseEntity.badRequest().body("Unauthorized User");
 }
 catch (Exception e){
     e.printStackTrace();
 }
 
-        return ResponseEntity.badRequest().body("can't update");
+        return ResponseEntity.badRequest().body("violating key constraint");
 
     }
     @GetMapping("/getTeacherSchedule")
-    ResponseEntity<?> getTeacherSchedule(@RequestBody ResetRequest request){
-
+    ResponseEntity<?> getTeacherSchedule(@RequestParam String email ){
+        ResetRequest request= new ResetRequest(email);
 
         if (request.getEmail().equals("") || request == null || request.getEmail() == null)
             return ResponseEntity.badRequest().body("empty mail");
@@ -73,9 +73,9 @@ catch (Exception e){
     }
 
     @GetMapping("/getStudentByGroup")
-        ResponseEntity<?> getStudentByGroup(@RequestBody GroupScheduleRequest request){
+        ResponseEntity<?> getStudentByGroup(@RequestParam int groupId){
         try {
-
+            GroupScheduleRequest request=new GroupScheduleRequest(groupId);
             if (request == null || !this.dataService.groupExists(request.getGroupID()))
                 return ResponseEntity.badRequest().body("group does not exists");
 

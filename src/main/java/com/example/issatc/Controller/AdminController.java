@@ -216,13 +216,15 @@ ResponseEntity<?> getDepartments(){
     }
 
       @GetMapping("/studentListBySector")
-              ResponseEntity<?> getstudentListBySector(@RequestBody StudentListBySector request){
+              ResponseEntity<?> getstudentListBySector(@RequestParam String sectorId){
 try {
+    StudentListBySector request =new StudentListBySector(sectorId);
     if(this.dataService.sectorExists(request.getSectorId()))
     return ResponseEntity.ok().body(this.dataService.getStudentBySector(request.getSectorId()));
     return ResponseEntity.badRequest().body("sectorId does not exist");
 
 }catch (Exception e){
+    e.printStackTrace();
     return ResponseEntity.internalServerError().body("internalServerError");
 }
         }

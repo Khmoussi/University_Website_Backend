@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -35,15 +32,15 @@ public class StudentController {
     }
 
     @GetMapping("/getAbsence")
-    ResponseEntity<?> getAbsence(@RequestBody ResetRequest request ,Principal principal){
+    ResponseEntity<?> getAbsence(@RequestParam String email , Principal principal){
         UserMapper user = (UserMapper) ((Authentication) principal).getPrincipal();
         try {
-        if(!request.getEmail().equals(user.getEmail()))
-            throw new UnauthorizedException(request.getEmail());
+        if(!email.equals(user.getEmail()))
+            throw new UnauthorizedException(email);
         List<SubjectAbsence> list;
 
 
-            list=this.dataService.getAbsence(request.getEmail());
+            list=this.dataService.getAbsence(email);
             return ResponseEntity.ok().body(list);
         }catch (UnauthorizedException e) {
             e.printStackTrace();
@@ -56,7 +53,8 @@ public class StudentController {
         }
     }
     @GetMapping("/getGroupSchedule")
-    ResponseEntity<?> getGroupSchedule(@RequestBody ResetRequest request ,Principal principal){
+    ResponseEntity<?> getGroupSchedule(@RequestParam String email ,Principal principal){
+        ResetRequest request= new ResetRequest(email);
         UserMapper user = (UserMapper) ((Authentication) principal).getPrincipal();
         try{
         if(!request.getEmail().equals(user.getEmail()))
@@ -86,8 +84,9 @@ public class StudentController {
     }
 
     @GetMapping("/getGrades")
-    ResponseEntity<?> getGrades(@RequestBody ResetRequest request, Principal principal){
+    ResponseEntity<?> getGrades(@RequestParam String email, Principal principal){
        try {
+           ResetRequest request= new ResetRequest(email);
            UserMapper user = (UserMapper) ((Authentication) principal).getPrincipal();
            if(!request.getEmail().equals(user.getEmail()))
                throw new UnauthorizedException(request.getEmail());
