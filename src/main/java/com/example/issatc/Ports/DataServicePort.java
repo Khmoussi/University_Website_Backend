@@ -1,13 +1,11 @@
 package com.example.issatc.Ports;
 
 import com.example.issatc.Entities.*;
+import com.example.issatc.Entities.Requests.GroupGradesRequest;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
 import com.example.issatc.Entities.Requests.StudentPresenceRequest;
 import com.example.issatc.Entities.Requests.SubjectAbsence;
-import com.example.issatc.Entities.Responses.GroupSchedule;
-import com.example.issatc.Entities.Responses.SubjectWithGroups;
-import com.example.issatc.Entities.Responses.TeacherSchedule;
-import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
+import com.example.issatc.Entities.Responses.*;
 import com.example.issatc.Infrastructure.EntityMappers.ClassRoom;
 import com.example.issatc.Infrastructure.EntityMappers.Request.GroupScheduleRequest;
 import org.springframework.http.ResponseEntity;
@@ -49,4 +47,16 @@ public interface DataServicePort {
     List<Classroom> getClassRooms();
 
     List<Student> getStudentByGroup(GroupScheduleRequest request);
+
+    boolean postGroupGrades(GroupGradesRequest request);
+
+    boolean groupExistsInSector(GroupGradesRequest request);
+
+    boolean groupSubjectInsector(GroupGradesRequest request);
+
+    List<SubjectWithNote> getGrades(String email);
+
+    boolean teacherExistsInGroupSubject(GroupGradesRequest request);
+
+    boolean departmentExistsById(String departmentName);
 }

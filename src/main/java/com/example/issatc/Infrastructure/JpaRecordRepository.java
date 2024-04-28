@@ -2,6 +2,7 @@ package com.example.issatc.Infrastructure;
 
 import com.example.issatc.Infrastructure.EntityMappers.RecordMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,22 @@ public interface JpaRecordRepository extends JpaRepository<RecordMapper,RecordMa
 
     @Query ("select new com.example.issatc.Entities.Requests.SubjectAbsence(r.subject.name , r.absenceNum , r.subject.type ,r.subject.semester) from record r where r.student.email =:email ")
   List<SubjectAbsence> getRecordByStudent(@Param("email") String email);
+    @Transactional(dontRollbackOn = DataIntegrityViolationException.class)
+    @Modifying
+    @Query(value = "insert into record  (subject_id,student_id , note_num ,absence_num,teacher_id) values(:subjectId,:email,:note,0,:teacherMail)",nativeQuery = true)
+    int saveNote(@Param("subjectId") int subjectId, @Param("email") String email, @Param("teacherMail") String teacherMail, @Param("note") int note);
+
+    @Transactional
+    @Modifying
+    @Query("update   record r  set r.noteNum =:note  where r.subject.id =:subjectId and r.student.email =:email  and r.teacher.email =:teacherMail ")
+
+    int updateNote( @Param("subjectId") int subjectId, @Param("email") String email,@Param("teacherMail") String teacherMail, @Param("note") int note);
+
+    @Query("select  r.noteNum from record r where r.student.email =:email and r.subject.id =:id")
+    Integer getNoteByEmailSubject(@Param("email") String email,@Param("id") int id);
+
+/*    @Query("select count(*) from record r where  r.subject.id =:subjectId and  r.student.email in (select s.email from student s where s.group.id =:groupId ) ")
+    int subjectWithGroupRecordExists(@Param("groupId") int groupId, @Param("subjectId") int subjectId);
+
+ */
 }

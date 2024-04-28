@@ -1,20 +1,15 @@
 package com.example.issatc.Infrastructure.EntityMappers.Implementation;
 
 import com.example.issatc.Entities.*;
-import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
-import com.example.issatc.Entities.Requests.StudentPresence;
-import com.example.issatc.Entities.Requests.StudentPresenceRequest;
-import com.example.issatc.Entities.Requests.SubjectAbsence;
-import com.example.issatc.Entities.Responses.GroupSchedule;
-import com.example.issatc.Entities.Responses.SubjectWithGroups;
-import com.example.issatc.Entities.Responses.TeacherSchedule;
-import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
+import com.example.issatc.Entities.Requests.*;
+import com.example.issatc.Entities.Responses.*;
 import com.example.issatc.Infrastructure.EntityMappers.*;
 import com.example.issatc.Infrastructure.JpaRecordRepository;
 import com.example.issatc.Infrastructure.JpaSectorRepository;
 import com.example.issatc.Ports.DataRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -36,6 +31,7 @@ public class DataRepositoryImpl implements DataRepository {
     private final JpaSeanceRepository seanceRepository;
     private final JpaRecordRepository recordRepository;
     private final JpaClassRoomRepository classRoomRepository;
+    private final JpaSubjectRepository subjectRepository;
 
     @Override
     public List<TeacherWithDepResponse> getAllTeachers() {
@@ -243,6 +239,81 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
     @Override
     public List<Student> getStudentByGroup(int groupID) {
         return this.studentRepository.getStudentByGroup(groupID);
+    }
+
+    //doesn't work @Transactional(dontRollbackOn = DataIntegrityViolationException.class)
+    @Override
+    public boolean postGroupGrades(GroupGradesRequest request) {
+        /*if(this.recordRepository.subjectWithGroupRecordExists(request.getGroupId(),request.getSubjectId())>0)
+            return this.updateGroupGrades(request);
+
+         */
+int k=0;
+        for (NumInscWithNote i:request.getList()
+             ) {
+            try {
+                this.recordRepository.saveNote(request.getSubjectId(), i.getEmail(), request.getTeacherMail(), i.getNote());
+           //throw new IllegalArgumentException(); mayrollbakich ki n7otha
+            }catch (DataIntegrityViolationException e){
+                e.printStackTrace();
+               return( this.recordRepository.updateNote(request.getSubjectId(),i.getEmail(),request.getTeacherMail(),i.getNote())>0);
+
+            }
+
+            k++;
+        }
+        return (k==request.getList().size());
+
+    }
+   /* @Transactional
+    public boolean updateGroupGrades(GroupGradesRequest request) {
+        int k=0;
+        for (NumInscWithNote i:request.getList()
+        ) {
+
+            this.recordRepository.updateNote(request.getSubjectId(),i.getEmail(),i.getNote());
+            k++;
+        }
+        return (k==request.getList().size());
+
+    }
+
+    */
+
+    @Override
+    public boolean groupExistsInSector(int groupId, String sectorId) {
+        return this.groupRepository.groupExistsInSector(groupId,sectorId)>=1;
+    }
+
+    @Override
+    public boolean subjectInSector(GroupGradesRequest request) {
+       int result=this.sectorRepository.subjectInSector(request.getSubjectId(),request.getSectorId());
+       System.out.println("kl");
+        return (result>0);
+    }
+
+    @Override
+    public List<SubjectWithNote> getGrades(String email) {
+        int intValue;
+        List<SubjectWithNote> resultList=new ArrayList<>();
+        List<SubjectMapper> list=   this.getSubjectsByStudent(email);
+        for (SubjectMapper s:list
+             ) {
+            Integer note =this.recordRepository.getNoteByEmailSubject(email,s.getId());
+
+                if(note!=null)
+                   if(note==-1)
+                       note=null;
+                resultList.add(new SubjectWithNote(new Subject(s.getId(), s.getName(), s.getType(), s.getSemester(), s.getCoeff(), s.getSessionNumb()), note));
+
+
+        }
+         return resultList;
+    }
+
+    @Override
+    public boolean departmentExistsById(String departmentName) {
+        return this.departmentRepository.existsByName(departmentName)>=1;
     }
 
     List<SubjectMapper> getSubjectsByStudent(String email){

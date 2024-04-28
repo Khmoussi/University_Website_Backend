@@ -7,6 +7,7 @@ import com.example.issatc.Infrastructure.EntityMappers.Request.TeacherWithDepReq
 import com.example.issatc.Ports.AuthenticationServicePort;
 import com.example.issatc.Ports.DataServicePort;
 import com.example.issatc.utilities.JwtAuthenticationService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,8 @@ public class AdminController {
         e.printStackTrace();
         return ResponseEntity.badRequest().body("An inscription number doesn't belong to the sector");
     }
+
+
     @PostMapping("/SignStudentUser")
     ResponseEntity<?> createAccount(@RequestBody StudentAccountRequest accountRequest){
         //true user exists doesn't have account
@@ -137,12 +140,15 @@ public class AdminController {
     ResponseEntity<?> modifyTeacherListing(@RequestBody TeacherWithDepRequest request){
 try {
     TeacherWithDepRequest r = request;
+    if(!this.dataService.departmentExistsById(request.getDepartmentName()))
+        return ResponseEntity.badRequest().body("a department does not exist please check the department list");
+
     if (this.authenticationService.modifyTeacherAccountNoPsd(request.getFirstName(), request.getLastName(), request.getEmail(), request.getCin(), request.getPhoneNum())
             &&
             this.authenticationService.modifyTeacherDep(request.getEmail(), request.getDepartmentName()))
 
         return ResponseEntity.ok().body("modification succeded");
-    return ResponseEntity.badRequest().body("modification failed");
+    return ResponseEntity.badRequest().body("teacher does not have an account yet");
 }catch (Exception e){
     e.printStackTrace();
     return ResponseEntity.badRequest().body("modification failed");
@@ -157,7 +163,7 @@ try {
     int result = this.authenticationService.saveDepartmentChef(request);
     if (result > 0)
         return ResponseEntity.ok().body("success assignment");
-    return ResponseEntity.badRequest().body("failed");
+    return ResponseEntity.badRequest().body("teacher does not have an account yet");
 }catch (Exception e){
     return ResponseEntity.badRequest().body("a chef already exists in this department");
 

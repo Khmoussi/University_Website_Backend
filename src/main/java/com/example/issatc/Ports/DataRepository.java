@@ -1,13 +1,11 @@
 package com.example.issatc.Ports;
 
 import com.example.issatc.Entities.*;
+import com.example.issatc.Entities.Requests.GroupGradesRequest;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
 import com.example.issatc.Entities.Requests.StudentPresenceRequest;
 import com.example.issatc.Entities.Requests.SubjectAbsence;
-import com.example.issatc.Entities.Responses.GroupSchedule;
-import com.example.issatc.Entities.Responses.SubjectWithGroups;
-import com.example.issatc.Entities.Responses.TeacherSchedule;
-import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
+import com.example.issatc.Entities.Responses.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -54,4 +52,14 @@ public interface DataRepository {
     List<Classroom> getClassRooms();
 
     List<Student> getStudentByGroup(int groupID);
+
+    boolean postGroupGrades(GroupGradesRequest request);
+
+    boolean groupExistsInSector(int groupId, String sectorId);
+
+    boolean subjectInSector(GroupGradesRequest request);
+
+    List<SubjectWithNote> getGrades(String email);
+
+    boolean departmentExistsById(String departmentName);
 }

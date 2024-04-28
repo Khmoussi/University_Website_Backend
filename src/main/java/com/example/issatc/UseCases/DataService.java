@@ -1,13 +1,11 @@
 package com.example.issatc.UseCases;
 
 import com.example.issatc.Entities.*;
+import com.example.issatc.Entities.Requests.GroupGradesRequest;
 import com.example.issatc.Entities.Requests.GroupsBySectorRequest;
 import com.example.issatc.Entities.Requests.StudentPresenceRequest;
 import com.example.issatc.Entities.Requests.SubjectAbsence;
-import com.example.issatc.Entities.Responses.GroupSchedule;
-import com.example.issatc.Entities.Responses.SubjectWithGroups;
-import com.example.issatc.Entities.Responses.TeacherSchedule;
-import com.example.issatc.Entities.Responses.TeacherWithDepResponse;
+import com.example.issatc.Entities.Responses.*;
 import com.example.issatc.Infrastructure.EntityMappers.Request.GroupScheduleRequest;
 import com.example.issatc.Ports.DataRepository;
 import com.example.issatc.Ports.DataServicePort;
@@ -124,6 +122,49 @@ public class DataService implements DataServicePort {
     @Override
     public List<Student> getStudentByGroup(GroupScheduleRequest request) {
         return this.dataRepository.getStudentByGroup(request.getGroupID());
+    }
+
+    @Override
+    public boolean postGroupGrades(GroupGradesRequest request) {
+        return this.dataRepository.postGroupGrades(request);
+    }
+
+    @Override
+    public boolean groupExistsInSector(GroupGradesRequest request) {
+       return this.dataRepository.groupExistsInSector(request.getGroupId(),request.getSectorId());
+    }
+
+    @Override
+    public boolean groupSubjectInsector(GroupGradesRequest request) {
+        return this.dataRepository.subjectInSector(request);
+    }
+
+    @Override
+    public List<SubjectWithNote> getGrades(String email) {
+        return this.dataRepository.getGrades(email);
+    }
+
+    @Override
+    public boolean teacherExistsInGroupSubject(GroupGradesRequest request) {
+
+       List<SubjectWithGroups> list = this.getTeacherSubjectGroups(request.getTeacherMail());
+        for (SubjectWithGroups s:list
+             ) {
+            if(request.getSubjectId()==s.getSubject().getId()){
+                for (Group g:s.getGroupList()
+                     ) {
+                    if(request.getGroupId()==g.getId())
+                        return true;
+
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean departmentExistsById(String departmentName) {
+        return this.dataRepository.departmentExistsById(departmentName);
     }
 
 

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity(name = "record")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"subject_id","student_id"}))
 @IdClass(RecordMapper.RecordId.class)
 
 public class RecordMapper {

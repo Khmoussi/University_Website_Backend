@@ -23,4 +23,7 @@ public interface JpaSectorRepository extends JpaRepository<SectorMapper,String> 
   @Transactional
   @Query(value = "insert into sector_subject  (sector_id , subject_id) values(:name,:subject_id)" ,nativeQuery = true)
     int saveSectorSubject(@Param("name") String name, @Param("subject_id") int id);
+
+  @Query(value = "select count(*) from sector_subject where subject_id = :subjectId and sector_id = :sectorId", nativeQuery = true)
+    int subjectInSector(@Param("subjectId") int subjectId, @Param("sectorId") String sectorId);
 }

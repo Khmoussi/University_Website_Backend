@@ -12,4 +12,7 @@ public interface JpaGroupRepository extends JpaRepository<GroupMapper,Integer> {
 
    @Query(value = "select distinct sector_id from student where group_id =:id ",nativeQuery = true)
     String getSectorNameById(@Param("id") int id);
+
+@Query("select count(*) from student s where s.group.id =:groupId and s.sector.name =:sectorId")
+    int groupExistsInSector(@Param("groupId") int groupId, @Param("sectorId")String sectorId);
 }

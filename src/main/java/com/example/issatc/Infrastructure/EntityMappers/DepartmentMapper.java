@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "department")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 public class DepartmentMapper {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
