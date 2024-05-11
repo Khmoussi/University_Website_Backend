@@ -10,4 +10,5 @@ public interface JpaResetPasswordRepository extends JpaRepository<ResetPasswordM
     @Query("select count(*) from reset_password p where p.email =:email and p.recoveryCode =:recoveryCode and p.expirationDate >:currentTimeMillis")
     int verifyCode(@Param("email") String email, @Param("recoveryCode") long recoveryCode, @Param("currentTimeMillis") long currentTimeMillis);
 
+
 }

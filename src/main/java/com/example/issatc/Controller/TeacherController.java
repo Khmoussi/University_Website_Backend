@@ -121,6 +121,19 @@ catch (Exception e){
 
     }
 
+    @GetMapping("/gestionEmploie")
+    ResponseEntity<?> getTeacherSubjectGroups(@RequestParam String email){
+        try {
+            ResetRequest request=new ResetRequest(email);
+            if (request.getEmail().equals("") || request == null || request.getEmail() == null)
+                return ResponseEntity.badRequest().body("empty mail");
 
+            return ResponseEntity.ok().body(this.dataService.getTeacherSubjectGroups(request.getEmail()));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Wrong Email");
+
+        }
+    }
 
 }

@@ -171,7 +171,7 @@ subjectWithGroupsList.add(   new SubjectWithGroups(new Subject(i.getId(),i.getNa
         for (SeanceMapper seance:seanceMappers
              ) {
 
-            list.add(new GroupSchedule(seance.getClassRoom().getName(),seance.getTeacher().getFirstName(),seance.getTeacher().getLastName(),seance.getGroup().getGroupName(),seance.getSeanceNumb(),seance.getDay()));
+            list.add(new GroupSchedule(seance.getClassRoom().getName(),seance.getTeacher().getFirstName(),seance.getTeacher().getLastName(),seance.getGroup().getGroupName(),seance.getSeanceNumb(),seance.getDay(),seance.getSubject().getName(),seance.getSubject().getType(),seance.getGroup().getId(),seance.getSubject().getId()));
         }
         return list;
     }
@@ -329,7 +329,7 @@ int k=0;
         for (SeanceMapper seance:seanceMappers
         ) {
             String sectorName=this.groupRepository.getSectorNameById(seance.getGroup().getId());
-            teacherScheduleList.add(new TeacherSchedule(seance.getClassRoom().getName(),seance.getGroup().getGroupName(),sectorName,seance.getSeanceNumb(),seance.getDay()));
+            teacherScheduleList.add(new TeacherSchedule(seance.getClassRoom().getName(),seance.getGroup().getGroupName(),sectorName,seance.getSeanceNumb(),seance.getDay(),seance.getSubject().getName(),seance.getSubject().getType(),seance.getGroup().getId(),seance.getSubject().getId()));
         }
         return teacherScheduleList;
     }
